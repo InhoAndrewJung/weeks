@@ -1,6 +1,5 @@
 package com.weeks.user.controller;
 
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +16,11 @@ import lombok.extern.slf4j.Slf4j;
 public class UserController {
 	@Autowired
 	UserService userService;
-	
+
 	@GetMapping("/userList")
 	public List<User> userList() {
 		log.info("dddddd");
 		return userService.findAll();
 	}
-	
+
 }
