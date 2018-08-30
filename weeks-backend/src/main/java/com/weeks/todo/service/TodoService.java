@@ -1,15 +1,23 @@
 package com.weeks.todo.service;
 
-import java.util.Date;
 
 import com.weeks.todo.vo.Todo;
-import com.weeks.todo.vo.TodoRequest;
 import com.weeks.todo.vo.TodoResponse;
 import com.weeks.util.payload.APIResponse;
 
+/**
+ * @author changheelee
+ *
+ */
 public interface TodoService {
+	
+	/**
+	 * @param todo
+	 * @사용되는 멤버변수 : todoUid, todoContent, todoDate
+	 * @return
+	 */
 	public APIResponse addTodo(Todo todo);
-	public TodoResponse getAllTodos(Long userId, Date todoDate);
-	public APIResponse updateTodo(TodoRequest todoRequest);
-	public APIResponse deleteTodo(Integer todoId);
+	public TodoResponse getAllTodos(Todo todo);
+	public APIResponse updateTodo(Todo todo);
+	public APIResponse deleteTodo(Todo todo);
 }

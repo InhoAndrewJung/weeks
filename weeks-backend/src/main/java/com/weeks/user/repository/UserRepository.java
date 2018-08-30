@@ -7,5 +7,4 @@ import com.weeks.user.vo.User;
 
 public interface UserRepository extends JpaRepository<User, Integer> {
 	Boolean existsByUid(String uid);
-
 }

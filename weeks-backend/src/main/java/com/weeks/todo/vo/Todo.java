@@ -12,12 +12,11 @@ import javax.persistence.Table;
 import lombok.Data;
 
 /**
- * @author changheelee
- * todo 
+ * @author changheelee todo
  */
 @Data
 @Entity
-@Table(name="todo")
+@Table(name = "todo")
 public class Todo {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,12 +25,10 @@ public class Todo {
 	private Date todoDate;
 	private Boolean todoStatus;
 	private String todoContent;
-	
-	private int userId;
+	private String todoUid;
 
 	@PrePersist
 	public void preset() {
-		this.todoDate = new Date();
 		this.todoStatus = false;
 	}
 }

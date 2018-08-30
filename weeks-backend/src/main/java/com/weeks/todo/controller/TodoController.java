@@ -1,37 +1,46 @@
 package com.weeks.todo.controller;
 
-import java.util.Date;
-import java.util.List;
 
-import javax.servlet.http.HttpSession;
-
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.weeks.todo.service.TodoService;
 import com.weeks.todo.vo.Todo;
-import com.weeks.todo.vo.TodoRequest;
+import com.weeks.todo.vo.TodoResponse;
 import com.weeks.util.payload.APIResponse;
 
 @RestController
 @RequestMapping(path="/todo")
 public class TodoController {
+	@Autowired
+	TodoService todoService;
 	
-	public APIResponse addTodo(TodoRequest request) {
-		
-		return new APIResponse();
+	/**
+	 * @param todo
+	 * todoUid, todoContent, todoDate
+	 * @return APIres
+	 */
+	@PostMapping("/addTodo")
+	public APIResponse addTodo(@RequestBody Todo todo) {
+		return todoService.addTodo(todo);
 	}
 	
-	public List<Todo> getAllTodos(HttpSession session, Date date) {
-		//session에서 userId를 받아온다. 
-		return null;
+	@PostMapping("/getAllTodos")
+	public TodoResponse getAllTodos(@RequestBody Todo todo) {
+		return todoService.getAllTodos(todo);
 	}
 	
-	public APIResponse updateTodo(TodoRequest request) { //next 수정.
-		return new APIResponse();
-	}
+	@PostMapping("/updateTodo")
+	public APIResponse updateTodo(@RequestBody Todo todo) { 
+		return todoService.updateTodo(todo);
+	} 
 	
-	public APIResponse deleteTodo(int todoId) { //service : next 수정 필요.
-		return new APIResponse();
+	@PostMapping("/deleteTodo")
+	public APIResponse deleteTodo(@RequestBody Todo todo) { 
+		return todoService.deleteTodo(todo);
 	}
 	
 }
