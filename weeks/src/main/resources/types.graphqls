@@ -1,0 +1,28 @@
+schema {
+    query: Query
+    mutation : Mutation
+}
+
+type Query {
+  allHellos : [Hello]
+  allUsers : [User]
+}
+
+
+type Mutation {
+  createHello(name: String!): Hello
+}
+
+type Hello {
+    id: ID!
+	name : String!
+}
+
+type User {
+  userId : ID!
+  userEmail : String!
+  userName : String!
+  userPassword : String!
+  userDatetime : String!
+  userAuthority : String!
+}
