@@ -1,3 +1,4 @@
+
 package com.weeks.user.controller;
 
 import java.io.IOException;
@@ -34,7 +35,6 @@ public class UserController {
 //		
 //	}
 	
-	@Secured({"ROLE_USER"})
 	@PostMapping("/currentUser")
 	@CrossOrigin(origins="*", allowedHeaders="*")
 	public User getCurrentUser(HttpSession session) {
@@ -55,7 +55,6 @@ public class UserController {
 		return new APIResponse(true, "registered successfully");
 	}
 
-	@PreAuthorize("hasAnyRole('ROLE_USER')")
 	@GetMapping("/userList")
 	public List<User> userList() {
 		return userService.findAll();
