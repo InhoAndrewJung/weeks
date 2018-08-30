@@ -1,95 +1,87 @@
-import React, { Component } from 'react';
-import { login } from '../../util/APIUtils';
-import './Login.css';
-import { Link } from 'react-router-dom';
-import { ACCESS_TOKEN } from '../../constants';
+// Import FirebaseAuth and firebase.
+import React from 'react';
+import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
+import firebase from 'firebase';
+import Todo from '../todo/Todo';
+// Configure Firebase.
+const config = {
+  apiKey: 'AIzaSyC5UiWtouQv6_SrLNLMa7niqCaRYyFM424',
+  authDomain: 'weeks-34339.firebaseapp.com',
+  // ...
+};
+firebase.initializeApp(config);
 
-import { Form, Input, Button, Icon, notification } from 'antd';
-const FormItem = Form.Item;
+class SignInScreen extends React.Component {
 
-class Login extends Component {
+  // The component's Local state.
+  state = {
+    isSignedIn: false // Local signed-in state.
+  };
 
+  // Configure FirebaseUI.
+  uiConfig = {
+    // Popup signin flow rather than redirect flow.
+    signInFlow: 'popup',
+    // We will display Google and Facebook as auth providers.
+    signInOptions: [
+      firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+      firebase.auth.FacebookAuthProvider.PROVIDER_ID
+    ],
+    callbacks: {
+      // Avoid redirects after sign-in.
+      signInSuccessWithAuthResult: () => false
+    }
+  };
 
+  // Listen to the Firebase Auth state and set the local state.
+  componentDidMount() {
+    this.unregisterAuthObserver = firebase.auth().onAuthStateChanged(
+        (user) => this.setState({isSignedIn: !!user})
+    );
+  }
+  
+  // Make sure we un-register Firebase observers when the component unmounts.
+  componentWillUnmount() {
+    this.unregisterAuthObserver();
+  }
+
+  
   render() {
-    const AntWrappedLoginForm = Form.create()(LoginForm)
-    return (
-      <div className="login-container">
-        <h1 className="page-title">Login</h1>
-        <div className="login-content">
-          <AntWrappedLoginForm onLogin={this.props.onLogin} />
+    if (!this.state.isSignedIn) {
+      return (
+        <div>
+        <h5 class="card-header">아래의 계정을 통해 로그인해주세요.</h5>
+        <div class="card-body">
+        <div>
+          <StyledFirebaseAuth uiConfig={this.uiConfig} firebaseAuth={firebase.auth()}/>
         </div>
-      </div>
-    );
-  }
-}
-
-class LoginForm extends Component {
-  constructor(props) {
-    super(props);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  handleSubmit(event) {
-    event.preventDefault();
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        const loginRequest = Object.assign({}, values);
-        login(loginRequest)
-          .then(response => {
-            localStorage.setItem(ACCESS_TOKEN, response.accessToken);
-            this.props.onLogin();
-          }).catch(error => {
-            if (error.status === 401) {
-              notification.error({
-                message: 'Polling App',
-                description: 'Your Username or Password is incorrect. Please try again!'
-              });
-            } else {
-              notification.error({
-                message: 'Polling App',
-                description: error.message || 'Sorry! Something went wrong. Please try again!'
-              });
-            }
-          });
-      }
-    });
-  }
-
-  render() {
-    const { getFieldDecorator } = this.props.form;
+        </div>
+        </div>
+      );
+    }
+    if (this.state.isSignedIn) {
+        fetch(`/user/signManagement`,{
+          method: `POST`,
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({uid : firebase.auth().currentUser.uid})
+        }
+      )
+      .then(response => response.json())
+      .then(json => console.log(json))
+      .catch(error => console.log(error))
+    }
     return (
-      <Form onSubmit={this.handleSubmit} className="login-form">
-        <FormItem>
-          {getFieldDecorator('usernameOrEmail', {
-            rules: [{ required: true, message: 'Please input your username or email!' }],
-          })(
-            <Input
-              prefix={<Icon type="user" />}
-              size="large"
-              name="usernameOrEmail"
-              placeholder="Username or Email" />
-          )}
-        </FormItem>
-        <FormItem>
-          {getFieldDecorator('password', {
-            rules: [{ required: true, message: 'Please input your Password!' }],
-          })(
-            <Input
-              prefix={<Icon type="lock" />}
-              size="large"
-              name="password"
-              type="password"
-              placeholder="Password" />
-          )}
-        </FormItem>
-        <FormItem>
-          <Button type="primary" htmlType="submit" size="large" className="login-form-button">Login</Button>
-          Or <Link to="/signup">register now!</Link>
-        </FormItem>
-      </Form>
+      <Todo />
+      // <div>
+      //   <p>{firebase.auth().currentUser.uid}</p>
+      //   <p>Welcome {firebase.auth().currentUser.displayName}! You are now signed-in!</p>
+      //   <a onClick={() => firebase.auth().signOut()}>Sign-out</a>
+      // </div>
     );
   }
 }
 
-
-export default Login;
+export default SignInScreen
