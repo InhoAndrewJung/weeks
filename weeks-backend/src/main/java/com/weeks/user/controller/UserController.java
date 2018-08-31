@@ -31,7 +31,6 @@ public class UserController {
 	
 	@PostMapping("/signManagement")
 	public APIResponse signManagement(@RequestBody User user) {
-		
 		log.info("received uid : "+user.getUid());
 		if (userRepository.existsByUid(user.getUid())) {
 			log.info("이미 가입한 유저 : "+user.getUid());

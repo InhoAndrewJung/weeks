@@ -20,7 +20,7 @@ import lombok.Data;
 public class Todo {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int todoId;
+	private Long todoId;
 
 	private Date todoDate;
 	private Boolean todoStatus;

@@ -13,10 +13,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.weeks.todo.vo.Todo;
 
-public interface TodoRepository extends JpaRepository<Todo, Integer>{
+public interface TodoRepository extends JpaRepository<Todo, Long>{
 	
 	public List<Todo> findByTodoUidAndTodoDateLessThanEqualAndTodoStatus(
-			@Param("todoUid") String todoUid, 
+			@Param("todoUid") String todoUid,
 			@Param("todoDate") Date todoDate, 
 			@Param("todoStatus") Boolean todoStatus, Sort sort);
 	

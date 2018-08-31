@@ -28,16 +28,33 @@ public class TodoController {
 		return todoService.addTodo(todo);
 	}
 	
+	/**
+	 * @param todo
+	 * todoUid, todoDate
+	 * 날짜 기준으로 같거나 이전의 todo중 완료되지 않은 것들 불러온다.
+	 * @return
+	 */
 	@PostMapping("/getAllTodos")
 	public TodoResponse getAllTodos(@RequestBody Todo todo) {
 		return todoService.getAllTodos(todo);
 	}
 	
+	/**
+	 * @param todo
+	 * todoId, todoContent, todoStatus
+	 * checkbos event 와 content 수정 event를통합.
+	 * @return
+	 */
 	@PostMapping("/updateTodo")
 	public APIResponse updateTodo(@RequestBody Todo todo) { 
 		return todoService.updateTodo(todo);
 	} 
 	
+	/**
+	 * @param todo
+	 * todoId
+	 * @return
+	 */
 	@PostMapping("/deleteTodo")
 	public APIResponse deleteTodo(@RequestBody Todo todo) { 
 		return todoService.deleteTodo(todo);
